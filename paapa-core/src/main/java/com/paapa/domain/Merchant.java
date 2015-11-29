@@ -1,7 +1,9 @@
 package com.paapa.domain;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by amehta1 on 28-11-2015.
@@ -17,6 +19,8 @@ public class Merchant implements Serializable {
     private String email;
 
     private List<Wallets> channels;
+
+    private Map<Wallets, String> walletMerchantId;
 
     public String getName() {
         return name;
@@ -58,5 +62,16 @@ public class Merchant implements Serializable {
                 ", email='" + email + '\'' +
                 ", channels=" + channels +
                 '}';
+    }
+
+    public Map<Wallets, String> getWalletMerchantId() {
+        if(walletMerchantId == null)
+            walletMerchantId = new HashMap<Wallets, String>();
+
+        return walletMerchantId;
+    }
+
+    public void setWalletMerchantId(Map<Wallets, String> walletMerchantId) {
+        this.walletMerchantId = walletMerchantId;
     }
 }

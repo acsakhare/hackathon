@@ -20,7 +20,7 @@
     </int:service-activator>
 
     <int:service-activator id="emailServiceActivator"
-                           input-channel="registered-channel" output-channel="nullChannel"
+                           input-channel="email-channel" output-channel="nullChannel"
                            method="sendEmail" ref="emailService">
     </int:service-activator>
 
@@ -54,5 +54,26 @@
     <beans:bean id="payumoneyRegistrationQueue" class="org.apache.activemq.command.ActiveMQQueue">
         <beans:constructor-arg value="merchant.register.payumoney"/>
     </beans:bean>
+
+    <int:recipient-list-router input-channel="registered-channel">
+        <int:recipient channel="email-channel"/>
+        <int:recipient channel="persist-channel"/>
+    </int:recipient-list-router>
+
+    <int-jms:channel id="persist-channel" queue="persistQueue" />
+    <int-jms:channel id="email-channel" queue="emailQueue" />
+
+    <beans:bean id="persistQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <beans:constructor-arg value="merchant.registration.success.perist"/>
+    </beans:bean>
+
+    <beans:bean id="emailQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <beans:constructor-arg value="merchant.registration.success.email"/>
+    </beans:bean>
+
+    <int:service-activator id="persistenceManager"
+                           input-channel="persist-channel" output-channel="nullChannel"
+                           method="persist" ref="persistenceService">
+    </int:service-activator>
 
 </beans:beans>

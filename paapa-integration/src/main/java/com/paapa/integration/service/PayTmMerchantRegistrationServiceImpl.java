@@ -1,6 +1,7 @@
 package com.paapa.integration.service;
 
 import com.paapa.domain.Merchant;
+import com.paapa.domain.Wallets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ public class PayTmMerchantRegistrationServiceImpl implements MerchantRegistratio
 
     public Merchant register(Merchant merchant) {
         logger.info("Registering merchant with Paytm Wallet");
+
+        merchant.getWalletMerchantId().put(Wallets.PAYTM, "paytm_merchant_10");
 
         return merchant;
     }

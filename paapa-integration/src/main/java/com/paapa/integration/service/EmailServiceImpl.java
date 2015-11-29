@@ -14,6 +14,6 @@ public class EmailServiceImpl implements EmailService {
     private static final Logger logger = LoggerFactory.getLogger(EmailServiceImpl.class);
 
     public void sendEmail(Merchant merchant) {
-        logger.info("Registered merchant with Paytm Wallet");
+        logger.info("Registered merchant with " + merchant.getChannels().get(0) + " Wallet");
     }
 }
