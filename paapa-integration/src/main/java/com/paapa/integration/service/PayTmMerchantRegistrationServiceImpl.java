@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
+import java.util.Random;
 
 /**
  * Created by amehta on 28-11-2015.
@@ -21,10 +22,12 @@ public class PayTmMerchantRegistrationServiceImpl implements MerchantRegistratio
 
     private static final Logger logger = LoggerFactory.getLogger(PayTmMerchantRegistrationServiceImpl.class);
 
+    Random random = new Random();
+
     public Merchant register(Merchant merchant) {
         logger.info("Registering merchant with Paytm Wallet");
 
-        merchant.getWalletMerchantId().put(Wallets.PAYTM, "paytm_merchant_10");
+        merchant.getWalletMerchantId().put(Wallets.PAYTM, "paytm_merchant_"+random.nextDouble()*100);
 
         return merchant;
     }

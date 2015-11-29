@@ -2,6 +2,7 @@ package com.paapa.integration.service;
 
 
 import com.paapa.domain.Merchant;
+import com.paapa.domain.Wallets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,16 @@ public class PersistenceServiceImpl implements  PersistenceService{
     private static final Logger logger = LoggerFactory.getLogger(PayumoneyMerchantRegistrationServiceImpl.class);
 
     public void persist(Merchant merchant) {
-        logger.info("Persisting merchant information :" +merchant);
+        logger.info("Persisting merchant information :" + merchant);
+
+        String baseKey = "merchant." + merchant.getName();
 
         // or use template directly
-        template.opsForValue().set("merchant.name", merchant.getName());
-        template.opsForValue().set("merchant.unique", merchant.getName()+merchant.getPhoneNumber());
-        template.opsForValue().set("merchant.phone", merchant.getPhoneNumber());
-        template.opsForValue().set("merchant.email", merchant.getEmail());
-        template.opsForValue().set("merchant.wallet.paytm.merchantId", "10");
+        template.opsForValue().set(baseKey + ".name", merchant.getName());
+        template.opsForValue().set(baseKey + ".phone", merchant.getPhoneNumber());
+        template.opsForValue().set(baseKey + ".email", merchant.getEmail());
+        template.opsForValue().set(baseKey + Wallets.PAYTM.getRedisMerchantIdKey(), merchant.getWalletMerchantId().get(Wallets.PAYTM));
+        template.opsForValue().set(baseKey + Wallets.PAYUMONEY.getRedisMerchantIdKey(), merchant.getWalletMerchantId().get(Wallets.PAYUMONEY));
+        template.opsForValue().set(baseKey + Wallets.CITRUS.getRedisMerchantIdKey(), merchant.getWalletMerchantId().get(Wallets.CITRUS));
     }
 }
