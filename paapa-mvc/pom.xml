@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hackathon</groupId>
 	<artifactId>paapa</artifactId>
-	<name>ActiveMQ</name>
+	<name>Paapa :: MVC</name>
 	<packaging>war</packaging>
 	<version>1.0.0</version>
 	<properties>
@@ -215,6 +215,12 @@
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
 			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hackathon</groupId>
+			<artifactId>paapa-core</artifactId>
+			<version>1.0.0</version>
+			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.activemq</groupId>

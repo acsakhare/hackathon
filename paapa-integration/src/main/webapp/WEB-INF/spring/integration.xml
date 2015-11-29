@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:int="http://www.springframework.org/schema/integration"
+             xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xmlns:amq="http://activemq.apache.org/schema/core"
+             xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core-5.5.0.xsd
+				http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms-2.1.xsd
+	    http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.1.xsd">
+
+    <int-jms:channel id="registration-channel" queue="registerMerchantQueue" />
+
+    <int:service-activator id="paytmRegistrationActivator"
+                           input-channel="paytm-registration-channel" output-channel="registered-channel"
+                           method="register" ref="paytmMerchantRegistrationService">
+    </int:service-activator>
+
+    <int:service-activator id="emailServiceActivator"
+                           input-channel="registered-channel" output-channel="nullChannel"
+                           method="sendEmail" ref="emailService">
+    </int:service-activator>
+
+    <int:service-activator id="citrusRegistrationActivator"
+                           input-channel="citrus-registration-channel" output-channel="registered-channel"
+                           method="register" ref="citrusMerchantRegistrationService">
+    </int:service-activator>
+
+    <int:service-activator id="payumoneyRegistrationActivator"
+                           input-channel="payumoney-registration-channel" output-channel="registered-channel"
+                           method="register" ref="payumoneyMerchantRegistrationService">
+    </int:service-activator>
+
+    <int-jms:channel id="registered-channel" queue="registeredMerchantQueue" />
+    <int-jms:channel id="paytm-registration-channel" queue="paytmRegistrationQueue" />
+    <int-jms:channel id="citrus-registration-channel" queue="citrusRegistrationQueue" />
+    <int-jms:channel id="payumoney-registration-channel" queue="payumoneyRegistrationQueue" />
+
+    <beans:bean id="registeredMerchantQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <beans:constructor-arg value="merchant.register.success"/>
+    </beans:bean>
+
+    <beans:bean id="paytmRegistrationQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <beans:constructor-arg value="merchant.register.paytm"/>
+    </beans:bean>
+
+    <beans:bean id="citrusRegistrationQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <beans:constructor-arg value="merchant.register.citrus"/>
+    </beans:bean>
+
+    <beans:bean id="payumoneyRegistrationQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <beans:constructor-arg value="merchant.register.payumoney"/>
+    </beans:bean>
+
+</beans:beans>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:int="http://www.springframework.org/schema/integration"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xmlns:amq="http://activemq.apache.org/schema/core"
+             xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core-5.5.0.xsd
+	    http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.1.xsd">
+
+    <beans:import resource="integration.xml" />
+
+    <context:component-scan base-package="com.paapa"/>
+
+    <int:annotation-config/>
+
+    <beans:bean id="connectionFactory"
+                class="org.apache.activemq.pool.PooledConnectionFactory">
+        <beans:constructor-arg ref="amqConnectionFactory"/>
+    </beans:bean>
+
+    <beans:bean id="registerMerchantQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <beans:constructor-arg value="register.merchant"/>
+    </beans:bean>
+
+    <amq:connectionFactory id="amqConnectionFactory">
+        <beans:property name="brokerURL">
+            <beans:value>tcp://0.0.0.0:61616</beans:value>
+        </beans:property>
+    </amq:connectionFactory>
+</beans:beans>
